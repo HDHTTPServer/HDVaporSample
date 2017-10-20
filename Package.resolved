@@ -92,6 +92,15 @@
         }
       },
       {
+        "package": "HDHTTPServer",
+        "repositoryURL": "git@github.com:HDHTTPServer/HDHTTPServer.git",
+        "state": {
+          "branch": null,
+          "revision": "27eedd6a130da61503f7d0f21f487029535e4066",
+          "version": "0.0.1"
+        }
+      },
+      {
         "package": "JSON",
         "repositoryURL": "https://github.com/vapor/json.git",
         "state": {
@@ -146,12 +155,30 @@
         }
       },
       {
+        "package": "Signals",
+        "repositoryURL": "git@github.com:IBM-Swift/BlueSignals.git",
+        "state": {
+          "branch": null,
+          "revision": "0fab5a9f166e96f17bb9646dc56cd22a6f3c3757",
+          "version": "0.9.50"
+        }
+      },
+      {
         "package": "Sockets",
         "repositoryURL": "https://github.com/vapor/sockets.git",
         "state": {
           "branch": null,
           "revision": "f6b06982e94db71227e99c56fec5899a8526e8ad",
           "version": "2.1.0"
+        }
+      },
+      {
+        "package": "SwiftServerHttp",
+        "repositoryURL": "git@github.com:swift-server/http.git",
+        "state": {
+          "branch": null,
+          "revision": "f8516cc7252cc1e4a9f31ac5fa35175acdd2f47d",
+          "version": "0.1.0"
         }
       },
       {
