@@ -25,6 +25,8 @@
     "//": "crypto: Vapor's default cipher powered by OpenSSL (configure in crypto.json)",
     "cipher": "crypto",
 
+    "view": "leaf",
+
     "//": "Choose which middleware are enabled (and in which order).",
     "//": "error: Catches errors thrown in your application and returns a nice response.",
     "//": "date: Adds the 'Date' header to HTTP requests.",
@@ -39,7 +41,5 @@
     "//": "prepare: Supplied by the Fluent provider. Prepares the database (configure in fluent.json)",
     "commands": [
         "prepare"
-    ],
-
-    "view": "leaf"
+    ]
 }
