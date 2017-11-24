@@ -44,7 +44,7 @@ class MySocketHander: ClientSocketHandler, Hashable {
     }
 
     var isIdle: Bool {
-        return false
+        return !isOpen
     }
 
     required init() {
@@ -173,7 +173,7 @@ class MySocketManager: ClientSocketHandlerManager {
 
         currentIdleHandlers.remove(handler)
     }
-
+  
     func closeAll(done: () -> Void) {
         handlers.forEach { (handler) in
             handler.close {}
