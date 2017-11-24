@@ -28,11 +28,12 @@ extension SSSocket: Sockets.Socket {
     }
 }
 
-class MySocketHander: ClientSocketHandler {
+class MySocketHander: ClientSocketHandler, Hashable {
     typealias Socket = TCPInternetSocket
 
     private var mySocket: TCPInternetSocket?
     var myResponder: Responder?
+    var descor: Int = -1
 
     var isClosing: Bool {
         return false
@@ -40,6 +41,10 @@ class MySocketHander: ClientSocketHandler {
 
     var isOpen: Bool {
         return true
+    }
+
+    var isIdle: Bool {
+        return false
     }
 
     required init() {
@@ -128,50 +133,80 @@ class MySocketHander: ClientSocketHandler {
     }
 
     static func == (left: MySocketHander, right: MySocketHander) -> Bool {
-        guard let leftSocket = left.mySocket, let rightSocket = right.mySocket else {
-            return false
-        }
-
-        return leftSocket.descriptor.raw == rightSocket.descriptor.raw
+        return left.descor == right.descor
     }
 
     static func != (left: MySocketHander, right: MySocketHander) -> Bool {
         return !(left == right)
     }
+
+    var hashValue: Int {
+        return descor
+    }
 }
 
 class MySocketManager: ClientSocketHandlerManager {
+
+
     typealias Handler = MySocketHander
 
     private var handlers = [Handler]()
+    private var currentIdleHandlers = Set<Handler>()
     var responder: Responder?
     private var listener: TCPInternetSocket?
+    private var currentHandlerIndex = 0
 
     var count: Int {
         return handlers.count
     }
 
     func add(handler: MySocketHander) {
-        handler.myResponder = responder
-        handlers.append(handler)
+        currentHandlerIndex += 1
+        handler.descor = currentHandlerIndex
+        currentIdleHandlers.insert(handler)
     }
 
     func remove(handler: MySocketHander) {
         handlers = handlers.filter { (myHandler) -> Bool in
             return myHandler != handler
         }
+
+        currentIdleHandlers.remove(handler)
     }
 
-    func closeAll() {
+    func closeAll(done: () -> Void) {
         handlers.forEach { (handler) in
             handler.close {}
+            currentIdleHandlers.insert(handler)
         }
 
         handlers.removeAll()
+
+        done()
     }
 
     func prune() {
-        closeAll()
+        closeAll {}
+    }
+
+    func fetchIdleHandler() -> MySocketHander {
+        if let currentIdleHandler = currentIdleHandlers.first {
+            currentIdleHandlers.remove(currentIdleHandler)
+            handlers.append(currentIdleHandler)
+
+            currentIdleHandler.myResponder = responder
+            return currentIdleHandler
+        } else {
+            let newHandler = MySocketHander()
+            add(handler: newHandler)
+
+            currentIdleHandlers.remove(newHandler)
+            handlers.append(newHandler)
+
+            newHandler.myResponder = responder
+
+            return newHandler
+        }
     }
 
     func acceptClientConnection(serverSocket: SSSocket) -> TCPInternetSocket? {
