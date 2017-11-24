@@ -29,17 +29,14 @@ extension SSSocket: Sockets.Socket {
 }
 
 class MySocketHander: ClientSocketHandler {
-    var isClosing: Bool {
-        return false
-    }
-
-    func softClose() {
-    }
-
     typealias Socket = TCPInternetSocket
 
     private var mySocket: TCPInternetSocket?
     var myResponder: Responder?
+
+    var isClosing: Bool {
+        return false
+    }
 
     var isOpen: Bool {
         return true
@@ -54,6 +51,7 @@ class MySocketHander: ClientSocketHandler {
             return
         }
 
+        close {}
         mySocket = socket
 
         try socket.setTimeout(defaultServerTimeout)
@@ -115,7 +113,10 @@ class MySocketHander: ClientSocketHandler {
         } while keepAlive && !socket.isClosed
     }
 
-    func close() {
+    func closeIfIdleSocket() {
+    }
+
+    func close(done: () -> Void) {
         do {
             try mySocket?.close()
         } catch {
@@ -123,7 +124,19 @@ class MySocketHander: ClientSocketHandler {
         }
     }
 
-    func closeIfIdleSocket() {
+    func softClose(done: () -> Void) {
+    }
+
+    static func == (left: MySocketHander, right: MySocketHander) -> Bool {
+        guard let leftSocket = left.mySocket, let rightSocket = right.mySocket else {
+            return false
+        }
+
+        return leftSocket.descriptor.raw == rightSocket.descriptor.raw
+    }
+
+    static func != (left: MySocketHander, right: MySocketHander) -> Bool {
+        return !(left == right)
     }
 }
 
@@ -143,9 +156,15 @@ class MySocketManager: ClientSocketHandlerManager {
         handlers.append(handler)
     }
 
+    func remove(handler: MySocketHander) {
+        handlers = handlers.filter { (myHandler) -> Bool in
+            return myHandler != handler
+        }
+    }
+
     func closeAll() {
         handlers.forEach { (handler) in
-            handler.close()
+            handler.close {}
         }
 
         handlers.removeAll()
@@ -177,12 +196,6 @@ class MyServer: ServerProtocol {
     private let socketManager: MySocketManager
 
     required init(hostname: String, port: UInt16, _ securityLayer: SecurityLayer) throws {
-//        let sock_fd = socket(AF_INET, SOCK_STREAM, 0);
-//
-//        guard sock_fd != -1 else {
-//            throw Abort.serverError
-//        }
-
         self.hostName = hostname
         self.port = port
         self.socketManager = MySocketManager()
