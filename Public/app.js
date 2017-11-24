@@ -4,13 +4,16 @@ const vm = new Vue({
         results: []
     },
     mounted: function () {
-      this.interval()
+        this.interval()
     },
     methods: {
         interval: function () {
-            let timer = setInterval(() => {
+            var results = this.results
+            setInterval(function () {
                 axios.get("http://localhost:8080/api")
-                    .then(response => this.results.push(response.data))
+                    .then(function (response) {
+                        results.push(response.data)
+                    })
             }, 1000);
         }
     }
