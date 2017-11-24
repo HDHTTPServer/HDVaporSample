@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "BigInt",
+        "repositoryURL": "https://github.com/attaswift/BigInt.git",
+        "state": {
+          "branch": null,
+          "revision": "e3879c569817a844ca2c54a9095c59e1d779cd5d",
+          "version": "3.0.1"
+        }
+      },
+      {
         "package": "Bits",
         "repositoryURL": "https://github.com/vapor/bits.git",
         "state": {
@@ -179,6 +188,15 @@
           "branch": null,
           "revision": "0fab5a9f166e96f17bb9646dc56cd22a6f3c3757",
           "version": "0.9.50"
+        }
+      },
+      {
+        "package": "SipHash",
+        "repositoryURL": "https://github.com/attaswift/SipHash",
+        "state": {
+          "branch": null,
+          "revision": "7b47e3f23a66770b1eb18e15e20546aad398c9dd",
+          "version": "1.2.0"
         }
       },
       {
