@@ -16,14 +16,13 @@ let package = Package(
         .package(url: "https://github.com/attaswift/BigInt.git", .upToNextMajor(from: "3.0.1")),
     ],
     targets: [
-        .target(name: "App", dependencies: ["Vapor", "FluentProvider", "LeafProvider", "BigInt"],
+        .target(name: "App", dependencies: ["Vapor", "FluentProvider", "HDHTTPServer", "LeafProvider", "BigInt"],
                 exclude: [
                     "Config",
                     "Public",
                     "Resources",
                 ]),
-        .target(name: "Run", dependencies: ["App"]),
+        .target(name: "Run", dependencies: ["App", "HDHTTPServer"]),
         .testTarget(name: "AppTests", dependencies: ["App", "Testing"])
     ]
 )
-
