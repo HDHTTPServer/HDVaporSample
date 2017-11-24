@@ -11,7 +11,7 @@ class NumberUtilities {
         var first: BigUInt = 0
         var second: BigUInt = 1
         var result: BigUInt = 0;
-        for i in (2 ..< n + 1) {
+        (2 ..< n + 1).forEach { _ in
             let next: BigUInt = first + second
             result = next
             first = second
