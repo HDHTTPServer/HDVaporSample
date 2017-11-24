@@ -19,7 +19,9 @@ import App
 let config = try Config()
 try config.setup()
 
-let drop = try Droplet(config)
+let myServe = MyServerFactory()
+
+let drop = try Droplet(config: config, server: myServe)
 try drop.setup()
 
 try drop.run()

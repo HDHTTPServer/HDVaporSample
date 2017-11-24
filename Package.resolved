@@ -96,8 +96,9 @@
         "repositoryURL": "git@github.com:HDHTTPServer/HDHTTPServer.git",
         "state": {
           "branch": null,
-          "revision": "7a879444a4f76aae8fe41468912c0a8b58cd2974",
-          "version": "0.4.0"
+
+          "revision": "d04e4849fab2f6f1b1ba788fc95d94cd21435c89",
+          "version": "0.6.0"
         }
       },
       {
