@@ -1,7 +1,21 @@
 #extend("base")
 
-#export("title") { top page }
+#export("title") { HDVaporSample }
+
+#export("style") {
+    [v-cloak] {
+        display: none;
+    }
+}
 
 #export("content") {
-    <h1>Hello World!</h1>
+    <div class="container" id="app">
+        <span v-for="result in results">
+            <span v-cloak>{{ result.data }}, </span>
+        </span>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="app.js"></script>
 }

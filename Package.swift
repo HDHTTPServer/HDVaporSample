@@ -13,9 +13,10 @@ let package = Package(
         .package(url: "https://github.com/vapor/vapor.git", .upToNextMajor(from: "2.1.0")),
         .package(url: "https://github.com/vapor/fluent-provider.git", .upToNextMajor(from: "1.2.0")),
         .package(url: "https://github.com/vapor/leaf-provider.git", .upToNextMajor(from: "1.1.0")),
+        .package(url: "https://github.com/attaswift/BigInt.git", .upToNextMajor(from: "3.0.1")),
     ],
     targets: [
-        .target(name: "App", dependencies: ["Vapor", "FluentProvider", "HDHTTPServer", "LeafProvider"],
+        .target(name: "App", dependencies: ["Vapor", "FluentProvider", "HDHTTPServer", "LeafProvider", "BigInt"],
                 exclude: [
                     "Config",
                     "Public",
@@ -25,4 +26,3 @@ let package = Package(
         .testTarget(name: "AppTests", dependencies: ["App", "Testing"])
     ]
 )
-
