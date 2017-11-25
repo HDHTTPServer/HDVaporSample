@@ -6,6 +6,12 @@ const vm = new Vue({
     mounted: function () {
         this.interval()
     },
+    watch: {
+        results: function () {
+            var elem = this.$el.querySelector('#main')
+            elem.scrollTop = elem.scrollHeight
+        }
+    },
     methods: {
         interval: function () {
             var results = this.results
