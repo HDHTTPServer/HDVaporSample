@@ -43,8 +43,10 @@ class MySocketHander: ClientSocketHandler, Hashable {
         return true
     }
 
+    var _isIdle = Atomic<Bool>(true)
+
     var isIdle: Bool {
-        return !isOpen
+        return _isIdle.value
     }
 
     required init() {
@@ -66,8 +68,10 @@ class MySocketHander: ClientSocketHandler, Hashable {
         let parser = RequestParser()
         let serializer = ResponseSerializer()
 
+        _isIdle.value = false
         defer {
             try? socket.close()
+            _isIdle.value = true
         }
 
         var keepAlive = false
@@ -123,13 +127,22 @@ class MySocketHander: ClientSocketHandler, Hashable {
 
     func close(done: () -> Void) {
         do {
-            try mySocket?.close()
+            if isIdle {
+                try mySocket?.close()
+            } else {
+                repeat {
+                    usleep(100_000)
+                } while !isIdle
+                try mySocket?.close()
+            }
         } catch {
             print("close socket failed")
         }
+        done()
     }
 
     func softClose(done: () -> Void) {
+        // FIXME
     }
 
     static func == (left: MySocketHander, right: MySocketHander) -> Bool {
@@ -175,10 +188,21 @@ class MySocketManager: ClientSocketHandlerManager {
     }
   
     func closeAll(done: () -> Void) {
+        let c: Atomic<Int> = Atomic(handlers.count)
+
         handlers.forEach { (handler) in
-            handler.close {}
+            handler.close {
+                //FIXME: not atoic
+                c.value = c.value - 1
+            }
             currentIdleHandlers.insert(handler)
         }
+
+        repeat {
+            print("waiting...")
+            usleep(200_000);
+        } while c.value == 0
+
 
         handlers.removeAll()
 

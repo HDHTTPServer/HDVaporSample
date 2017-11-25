@@ -8,8 +8,8 @@ final class ApiController: ResourceRepresentable {
     func index(_ req: Request) throws -> ResponseRepresentable {
         let session = try req.assertSession()
         var counter = session.data["counter"]?.int ?? 0
-//        let data = counter.description
-        let data = NumberUtilities.fibonacci(counter)
+        let data = counter.description
+//        let data = NumberUtilities.fibonacci(counter)
         counter += 1
         try session.data.set("counter", counter)
 
